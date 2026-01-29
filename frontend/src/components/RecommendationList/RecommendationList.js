@@ -4,12 +4,12 @@ const RecommendationList = forwardRef(({ recommendations }, ref) => {
   return (
     <div
       ref={ref}
-      className="max-w-md mx-auto p-4 bg-white rounded-3xl shadow-md border"
+      className="p-4 bg-white rounded-3xl shadow-md border h-full flex flex-col"
     >
       <h2 className="text-lg font-bold mb-4">Lista de Recomendações:</h2>
 
       {recommendations.length === 0 && (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-4 flex-1">
           <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
             <img
               src="/assets/idea_icon.svg"

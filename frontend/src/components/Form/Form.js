@@ -28,17 +28,19 @@ function Form({ updateRecommendations }) {
 
   return (
     <form
-      className="max-w-md mx-auto p-4 bg-white rounded-3xl shadow-md border"
+      className="p-4 bg-white rounded-3xl shadow-md border"
       onSubmit={handleSubmit}
     >
       <Preferences
         preferences={preferences}
+        selectedPreferences={formData.selectedPreferences}
         onPreferenceChange={(selected) =>
           handleChange('selectedPreferences', selected)
         }
       />
       <Features
         features={features}
+        selectedFeatures={formData.selectedFeatures}
         onFeatureChange={(selected) =>
           handleChange('selectedFeatures', selected)
         }
