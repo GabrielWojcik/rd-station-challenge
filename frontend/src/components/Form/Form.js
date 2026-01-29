@@ -1,34 +1,34 @@
-// Form.js
-
-import React, { useEffect } from 'react';
 import { Preferences, Features, RecommendationType } from './Fields';
 import { SubmitButton } from './SubmitButton';
 import useProducts from '../../hooks/useProducts';
 import useForm from '../../hooks/useForm';
 import useRecommendations from '../../hooks/useRecommendations';
+import Button from '../shared/Button';
 
-function Form() {
-  const { preferences, features, products } = useProducts();
-  const { formData, handleChange } = useForm({
+function Form({ updateRecommendations }) {
+  const { preferences, features, products, loading } = useProducts();
+  const { formData, handleChange, resetForm } = useForm({
     selectedPreferences: [],
     selectedFeatures: [],
     selectedRecommendationType: '',
   });
 
-  const { getRecommendations, recommendations } = useRecommendations(products);
+  const { getRecommendations } = useRecommendations(products);
+
+  const isFormValid =
+    (formData.selectedPreferences.length > 0 ||
+      formData.selectedFeatures.length > 0) &&
+    formData.selectedRecommendationType !== '';
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const dataRecommendations = getRecommendations(formData);
-
-    /**
-     * Defina aqui a lógica para atualizar as recomendações e passar para a lista de recomendações
-     */
+    updateRecommendations(dataRecommendations);
   };
 
   return (
     <form
-      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md"
+      className="max-w-md mx-auto p-4 bg-white rounded-3xl shadow-md border"
       onSubmit={handleSubmit}
     >
       <Preferences
@@ -44,11 +44,18 @@ function Form() {
         }
       />
       <RecommendationType
+        selectedRecommendationType={formData.selectedRecommendationType}
         onRecommendationTypeChange={(selected) =>
           handleChange('selectedRecommendationType', selected)
         }
       />
-      <SubmitButton text="Obter recomendação" />
+      <div className="flex flex-col gap-2">
+        <SubmitButton
+          text="Obter recomendação"
+          disabled={!isFormValid || loading}
+        />
+        <Button text="Limpar" variant="secondary" onClick={resetForm} />
+      </div>
     </form>
   );
 }
