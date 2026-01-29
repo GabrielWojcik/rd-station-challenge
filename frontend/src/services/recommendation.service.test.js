@@ -11,7 +11,7 @@ describe('recommendationService', () => {
 
     const recommendations = recommendationService.getRecommendations(
       formData,
-      mockProducts
+      mockProducts,
     );
 
     expect(recommendations).toHaveLength(1);
@@ -34,7 +34,7 @@ describe('recommendationService', () => {
 
     const recommendations = recommendationService.getRecommendations(
       formData,
-      mockProducts
+      mockProducts,
     );
 
     expect(recommendations).toHaveLength(2);
@@ -59,7 +59,7 @@ describe('recommendationService', () => {
 
     const recommendations = recommendationService.getRecommendations(
       formData,
-      mockProducts
+      mockProducts,
     );
 
     expect(recommendations).toHaveLength(1);
@@ -68,16 +68,92 @@ describe('recommendationService', () => {
 
   test('Retorna o último match em caso de empate para SingleProduct', () => {
     const formData = {
-      selectedPreferences: ['Automação de marketing', 'Integração com chatbots'],
+      selectedPreferences: [
+        'Automação de marketing',
+        'Integração com chatbots',
+      ],
       selectedRecommendationType: 'SingleProduct',
     };
 
     const recommendations = recommendationService.getRecommendations(
       formData,
-      mockProducts
+      mockProducts,
     );
 
     expect(recommendations).toHaveLength(1);
     expect(recommendations[0].name).toBe('RD Conversas');
+  });
+
+  test('Retorna array vazio quando nenhuma preferência ou feature é selecionada', () => {
+    const formData = {
+      selectedPreferences: [],
+      selectedFeatures: [],
+      selectedRecommendationType: 'MultipleProducts',
+    };
+
+    const recommendations = recommendationService.getRecommendations(
+      formData,
+      mockProducts,
+    );
+
+    expect(recommendations).toHaveLength(0);
+  });
+
+  test('Retorna array vazio quando tipo de recomendação não é informado', () => {
+    const formData = {
+      selectedPreferences: ['Integração com chatbots'],
+      selectedFeatures: [],
+      selectedRecommendationType: '',
+    };
+
+    const recommendations = recommendationService.getRecommendations(
+      formData,
+      mockProducts,
+    );
+
+    expect(recommendations).toHaveLength(0);
+  });
+
+  test('Retorna recomendação baseada apenas em features', () => {
+    const formData = {
+      selectedPreferences: [],
+      selectedFeatures: ['Gestão de leads e oportunidades'],
+      selectedRecommendationType: 'SingleProduct',
+    };
+
+    const recommendations = recommendationService.getRecommendations(
+      formData,
+      mockProducts,
+    );
+
+    expect(recommendations).toHaveLength(1);
+    expect(recommendations[0].name).toBe('RD Station CRM');
+  });
+
+  test('Retorna array vazio quando lista de produtos está vazia', () => {
+    const formData = {
+      selectedPreferences: ['Integração com chatbots'],
+      selectedFeatures: [],
+      selectedRecommendationType: 'SingleProduct',
+    };
+
+    const recommendations = recommendationService.getRecommendations(
+      formData,
+      [],
+    );
+
+    expect(recommendations).toHaveLength(0);
+  });
+
+  test('Retorna array vazio quando produtos não é informado', () => {
+    const formData = {
+      selectedPreferences: ['Integração com chatbots'],
+      selectedFeatures: [],
+      selectedRecommendationType: 'SingleProduct',
+    };
+
+    const recommendations = recommendationService.getRecommendations(formData);
+
+    expect(recommendations).toHaveLength(0);
   });
 });
