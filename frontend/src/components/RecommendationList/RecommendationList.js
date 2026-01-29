@@ -29,9 +29,9 @@ const RecommendationList = forwardRef(({ recommendations }, ref) => {
         </div>
       )}
 
-      <ul>
+      <ul aria-live="polite">
         {recommendations.map((recommendation, index) => (
-          <li key={index} className="mb-2">
+          <li key={recommendation.id} className="mb-2">
             {recommendation.name}
           </li>
         ))}

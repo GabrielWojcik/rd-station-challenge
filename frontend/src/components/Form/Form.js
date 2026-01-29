@@ -26,6 +26,11 @@ function Form({ updateRecommendations }) {
     updateRecommendations(dataRecommendations);
   };
 
+  const handleReset = () => {
+    resetForm();
+    updateRecommendations([]);
+  };
+
   return (
     <form
       className="p-4 bg-white rounded-3xl shadow-md border"
@@ -56,7 +61,7 @@ function Form({ updateRecommendations }) {
           text="Obter recomendação"
           disabled={!isFormValid || loading}
         />
-        <Button text="Limpar" variant="secondary" onClick={resetForm} />
+        <Button text="Limpar" variant="secondary" onClick={handleReset} />
       </div>
     </form>
   );

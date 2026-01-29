@@ -44,4 +44,6 @@ const getRecommendations = (
   return [];
 };
 
-export default { getRecommendations };
+const recommendationService = { getRecommendations };
+
+export default recommendationService;

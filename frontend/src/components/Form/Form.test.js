@@ -16,45 +16,101 @@ describe('Form', () => {
     mockUpdateRecommendations.mockClear();
   });
 
-  test('Botão "Limpar" reseta todos os campos do formulário', () => {
-    render(<Form updateRecommendations={mockUpdateRecommendations} />);
+  describe('Botão Limpar', () => {
+    test('reseta todos os campos do formulário', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
 
-    const preferenceCheckbox = screen.getByLabelText('Automação de marketing');
-    const featureCheckbox = screen.getByLabelText('Gestão de leads');
-    const recommendationTypeRadio = screen.getByLabelText('Produto Único');
+      const preferenceCheckbox = screen.getByLabelText('Automação de marketing');
+      const featureCheckbox = screen.getByLabelText('Gestão de leads');
+      const recommendationTypeRadio = screen.getByLabelText('Produto Único');
 
-    userEvent.click(preferenceCheckbox);
-    userEvent.click(featureCheckbox);
-    userEvent.click(recommendationTypeRadio);
+      userEvent.click(preferenceCheckbox);
+      userEvent.click(featureCheckbox);
+      userEvent.click(recommendationTypeRadio);
 
-    expect(preferenceCheckbox).toBeChecked();
-    expect(featureCheckbox).toBeChecked();
-    expect(recommendationTypeRadio).toBeChecked();
+      expect(preferenceCheckbox).toBeChecked();
+      expect(featureCheckbox).toBeChecked();
+      expect(recommendationTypeRadio).toBeChecked();
 
-    const clearButton = screen.getByRole('button', { name: /limpar/i });
-    userEvent.click(clearButton);
+      const clearButton = screen.getByRole('button', { name: /limpar/i });
+      userEvent.click(clearButton);
 
-    expect(preferenceCheckbox).not.toBeChecked();
-    expect(featureCheckbox).not.toBeChecked();
-    expect(recommendationTypeRadio).not.toBeChecked();
+      expect(preferenceCheckbox).not.toBeChecked();
+      expect(featureCheckbox).not.toBeChecked();
+      expect(recommendationTypeRadio).not.toBeChecked();
+    });
+
+    test('limpa as recomendações ao resetar', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
+
+      const clearButton = screen.getByRole('button', { name: /limpar/i });
+      userEvent.click(clearButton);
+
+      expect(mockUpdateRecommendations).toHaveBeenCalledWith([]);
+    });
+
+    test('mantém formulário funcional após múltiplos usos', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
+
+      const preferenceCheckbox = screen.getByLabelText('Integração com chatbots');
+      const clearButton = screen.getByRole('button', { name: /limpar/i });
+
+      userEvent.click(preferenceCheckbox);
+      expect(preferenceCheckbox).toBeChecked();
+
+      userEvent.click(clearButton);
+      expect(preferenceCheckbox).not.toBeChecked();
+
+      userEvent.click(preferenceCheckbox);
+      expect(preferenceCheckbox).toBeChecked();
+
+      userEvent.click(clearButton);
+      expect(preferenceCheckbox).not.toBeChecked();
+    });
   });
 
-  test('Botão "Limpar" mantém formulário funcional após múltiplos usos', () => {
-    render(<Form updateRecommendations={mockUpdateRecommendations} />);
+  describe('Botão Obter recomendação', () => {
+    test('está desabilitado quando nenhuma seleção foi feita', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
 
-    const preferenceCheckbox = screen.getByLabelText('Integração com chatbots');
-    const clearButton = screen.getByRole('button', { name: /limpar/i });
+      const submitButton = screen.getByRole('button', { name: /obter recomendação/i });
+      expect(submitButton).toBeDisabled();
+    });
 
-    userEvent.click(preferenceCheckbox);
-    expect(preferenceCheckbox).toBeChecked();
+    test('está desabilitado quando apenas preferência é selecionada sem tipo de recomendação', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
 
-    userEvent.click(clearButton);
-    expect(preferenceCheckbox).not.toBeChecked();
+      const preferenceCheckbox = screen.getByLabelText('Automação de marketing');
+      userEvent.click(preferenceCheckbox);
 
-    userEvent.click(preferenceCheckbox);
-    expect(preferenceCheckbox).toBeChecked();
+      const submitButton = screen.getByRole('button', { name: /obter recomendação/i });
+      expect(submitButton).toBeDisabled();
+    });
 
-    userEvent.click(clearButton);
-    expect(preferenceCheckbox).not.toBeChecked();
+    test('está habilitado quando preferência e tipo de recomendação são selecionados', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
+
+      const preferenceCheckbox = screen.getByLabelText('Automação de marketing');
+      const recommendationTypeRadio = screen.getByLabelText('Produto Único');
+
+      userEvent.click(preferenceCheckbox);
+      userEvent.click(recommendationTypeRadio);
+
+      const submitButton = screen.getByRole('button', { name: /obter recomendação/i });
+      expect(submitButton).not.toBeDisabled();
+    });
+
+    test('está habilitado quando feature e tipo de recomendação são selecionados', () => {
+      render(<Form updateRecommendations={mockUpdateRecommendations} />);
+
+      const featureCheckbox = screen.getByLabelText('Gestão de leads');
+      const recommendationTypeRadio = screen.getByLabelText('Múltiplos Produtos');
+
+      userEvent.click(featureCheckbox);
+      userEvent.click(recommendationTypeRadio);
+
+      const submitButton = screen.getByRole('button', { name: /obter recomendação/i });
+      expect(submitButton).not.toBeDisabled();
+    });
   });
 });
