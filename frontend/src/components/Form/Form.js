@@ -56,12 +56,16 @@ function Form({ updateRecommendations }) {
           handleChange('selectedRecommendationType', selected)
         }
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <SubmitButton
           text="Obter recomendação"
           disabled={!isFormValid || loading}
         />
-        <Button text="Limpar" variant="secondary" onClick={handleReset} />
+        <Button
+          text="Limpar Seleção"
+          variant="secondary"
+          onClick={handleReset}
+        />
       </div>
     </form>
   );

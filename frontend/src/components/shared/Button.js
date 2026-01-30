@@ -5,7 +5,7 @@ function Button({
   disabled,
   onClick,
 }) {
-  const baseStyles = 'font-bold py-2 px-4 rounded-xl w-full transition-colors';
+  const baseStyles = 'font-bold p-4 rounded-xl w-full transition-colors';
 
   const variants = {
     primary: disabled

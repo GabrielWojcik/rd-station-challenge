@@ -6,7 +6,7 @@ function RecommendationType({
 }) {
   return (
     <div className="mb-4">
-      <h2 className="text-lg font-bold mb-2">Tipo de Recomendação:</h2>
+      <h2 className="text-lg font-bold mb-4">Tipo de Recomendação:</h2>
       <div className="flex items-center gap-4">
         <Checkbox
           type="radio"

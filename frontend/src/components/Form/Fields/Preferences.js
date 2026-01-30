@@ -15,7 +15,7 @@ function Preferences({
 
   return (
     <div className="mb-4">
-      <h2 className="text-lg font-bold mb-2">Preferências:</h2>
+      <h2 className="text-lg font-bold mb-4">Preferências:</h2>
       <ul>
         {preferences.map((preference) => (
           <li key={preference} className="mb-2">
